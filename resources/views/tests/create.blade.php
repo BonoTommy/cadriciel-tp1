@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Etudiant - Create')
-@section('h1', 'Ajouter un nouvel étudiant')
+@section('title', 'test - Create')
+@section('h1', 'Ajouter un test')
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-6">
@@ -14,37 +14,44 @@
                         </div>
                         <div class="card-body">   
                             <div class="control-group col-12 ">
-                                <label for="nom">Nom</label>
-                                <input type="text" id="nom" name="nom" class="form-control" placeholder="prénom nom">
-                                @error('nom')
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" class="form-control">
+                                @error('name')
                                     <div class="text-sm text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="control-group col-12 mt-3">
-                                <label for="date_de_naissance">Date de naissance</label>
-                                <input type="text" class="form-control" id="date_de_naissance" name="date_de_naissance" placeholder="dd-mm-yyyy">
-                                @error('date_de_naissance')
+                                <label for="date">Date de naissance</label>
+                                <input type="text" class="form-control" id="date" name="date" placeholder="dd-mm-yyyy">
+                                @error('date')
                                     <div class="text-sm text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="control-group col-12 mt-3">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" class="form-control">
-                                @error('email')
+                                <label for="unite">Unite</label>
+                                <input type="number" step="1" id="unite" name="unite" class="form-control">
+                                @error('unite')
                                     <div class="text-sm text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="control-group col-12 mt-3">
-                                <label for="phone">Telephone</label>
-                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="(###) ###-####">
-                                @error('phone')
+                                <label for="unite_kg">Teleunite_kg</label>
+                                <input type="number" step="0.01" id="unite_kg" name="unite_kg" class="form-control">
+                                @error('unite_kg')
                                     <div class="text-sm text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="control-group col-12 mt-3">
-                                <label for="adresse">Adresse</label>
-                                <input type="text" id="adresse" name="adresse" class="form-control">
-                                @error('adresse')
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" class="form-control">
+                                @error('password')
+                                    <div class="text-sm text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="control-group col-12 mt-3">
+                                <label for="password_confirmation">Password</label>
+                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control">
+                                @error('password')
                                     <div class="text-sm text-danger">{{ $message }}</div>
                                 @enderror
                             </div>

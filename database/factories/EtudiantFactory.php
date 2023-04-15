@@ -30,7 +30,7 @@ class EtudiantFactory extends Factory
             'phone'             => $standardizedPhoneNumber,
             'adresse'           => $faker->streetAddress('CA-QC'),
             'date_de_naissance' => $faker->dateTimeBetween('-65 years', '-18 years')->format('d-m-Y'),
-            'ville_id'          => $faker->numberBetween(1, 15)
+            'ville_id'          => Ville::all()->random()->id
         ];
     }
 }

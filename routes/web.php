@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\EtudiantController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\CustomAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,4 +29,11 @@ Route::get('etudiant-modifier/{etudiant}', [EtudiantController::class, 'edit'])-
 Route::put('etudiant-modifier/{etudiant}', [EtudiantController::class, 'update']);
 Route::delete('etudiant/{etudiant}', [EtudiantController::class, 'destroy'])->name('etudiants.destroy');
 
+Route::get('/login', [CustomAuthController::class, 'index'])->name('login');
+Route::post('/login', [CustomAuthController::class, 'Authentication'])->name('login.authentication');
+Route::get('/registration', [CustomAuthController::class, 'create'])->name('user.registration');
+Route::post('/registration-store', [CustomAuthController::class, 'store'])->name('user.store');
 
+
+Route::get('test-ajout', [TestController::class, 'create'])->name('tests.create');
+Route::post('test-ajout', [TestController::class, 'store']);

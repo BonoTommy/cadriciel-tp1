@@ -11,12 +11,18 @@ class Etudiant extends Model
 
     protected $fillable = ['nom', 'date_de_naissance', 'email', 'phone', 'adresse', 'ville_id'];
 
-    public function etudiantHasVille() {
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function etudiantHasVille()
+    {
         return $this->hasOne('App\Models\Ville', 'id', 'ville_id');
     }
 
-    public function etudiantHasVilles() {
+    public function etudiantHasVilles()
+    {
         return $this->hasMany(Ville::class);
     }
-
 }
