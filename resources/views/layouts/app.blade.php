@@ -5,28 +5,51 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    {{-- <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css"
+        rel="stylesheet"
+    /> --}}
     <link rel="stylesheet" href="{{ asset("css/app.css")}}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3">
         <div class="container">
+        @php $lang =  session('locale') @endphp
             <a href="{{route('accueil')}}" class="navbar-brand">Maisonneuve-e2295815</a>
-
+            <span class="text-white">@lang('lang.text_hello') {{ Auth::user()->name ?? "" }}</span>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul class="navbar-nav ms-auto">
+                @guest
                     <li class="nav-item">
                         <a href="{{ route('accueil')}}" class="nav-link">Accueil</a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('etudiants.create') }}" class="nav-link">S'enregistrer comme étudiant</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('login')}}" class="nav-link">Connexion</a>
+                    </li>
+                @else
+                    <li class="nav-item">
                         <a href="{{ route('etudiants.index') }}" class="nav-link">Liste des étudiants</a>
                     </li>
-                     <li class="nav-item">
-                        <a href="{{ route('etudiants.create') }}" class="nav-link">Ajouter un étudiant</a>
+                    {{-- <li class="nav-item">
+                        <a class="nav-link" href="{{route('blog.index')}}">Blogs</a>
+                    </li> --}}
+                    <li class="nav-item">
+                        <a href="{{ route('logout') }}" class="nav-link">Déconnexion</a>
+                    </li>
+                @endguest
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('lang', 'fr')}}">Français <i class="flag flag-france"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('lang', 'en')}}">English <i class="flag flag-us"></i></a>
                     </li>
                 </ul>
             </div>

@@ -9,7 +9,7 @@ class Etudiant extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nom', 'date_de_naissance', 'email', 'phone', 'adresse', 'ville_id'];
+    protected $fillable = ['id','nom', 'date_de_naissance', 'email', 'phone', 'adresse', 'ville_id'];
 
     public function user()
     {
@@ -24,5 +24,10 @@ class Etudiant extends Model
     public function etudiantHasVilles()
     {
         return $this->hasMany(Ville::class);
+    }
+
+    public function etudiantHasPosts() 
+    {
+        return $this->hasMany(BlogPost::class);
     }
 }

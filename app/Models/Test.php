@@ -9,5 +9,5 @@ class Test extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date', 'unite', 'unite_kg', 'password', 'password_confirmation', 'ville_id'];
+    protected $fillable = ['testId', 'name', 'email', 'date', 'unite', 'unite_kg', 'password', 'password_confirmation', 'ville_id'];
 }

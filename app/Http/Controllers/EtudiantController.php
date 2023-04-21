@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Etudiant;
 use App\Http\Requests\EtudiantStoreRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Models\Ville;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class EtudiantController extends Controller
 {
@@ -42,20 +45,29 @@ class EtudiantController extends Controller
      */
     public function store(EtudiantStoreRequest $request)
     {
-        $etudiant = Etudiant::create([
-            'nom'               => $request->nom,
-            'adresse'           => $request->adresse,
-            'phone'             => $request->phone,
-            'email'             => $request->email,
-            'date_de_naissance' => $request->date_de_naissance,
-            'ville_id'          => $request->ville_id
-        ]);
+        $etudiant = DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name'                  => $request->nom,
+                'email'                 => $request->email,
+                'password'              => Hash::make($request->password),
+                'password_confirmation' => Hash::make($request->password_confirmation)
+            ]);
+            $etudiant = Etudiant::create([
+                'id'                => $user->id,
+                'nom'               => $request->nom,
+                'adresse'           => $request->adresse,
+                'phone'             => $request->phone,
+                'email'             => $request->email,
+                'date_de_naissance' => $request->date_de_naissance,
+                'ville_id'          => $request->ville_id
+            ]);
 
-        if($request->has('villes')) {
-            $etudiant->villes()->attach($request->villes);
-        }
-
-        return redirect(route('etudiants.show', $etudiant->id))->withSuccess('Etudiant ajouter');
+            if ($request->has('villes')) {
+                $etudiant->villes()->attach($request->villes);
+            }
+            return $etudiant->id;
+        });
+        return redirect(route('etudiants.show', $etudiant))->withSuccess('Etudiant ajouter');
     }
 
     /**
@@ -88,18 +100,37 @@ class EtudiantController extends Controller
      * @param  \App\Models\Etudiant  $etudiant
      * @return \Illuminate\Http\Response
      */
-    public function update(EtudiantStoreRequest $request, Etudiant $etudiant)
+    public function update(EtudiantStoreRequest $request,  Etudiant $etudiant)
     {
-        $etudiant->update([
-            'nom'               => $request->nom,
-            'adresse'           => $request->adresse,
-            'phone'             => $request->phone,
-            'email'             => $request->email,
-            'date_de_naissance' => $request->date_de_naissance,
-            'ville_id'          => $request->ville_id
-        ]);
+        $user = User::find($etudiant->id);
+        $etudiantId = DB::transaction(function () use ($request, $etudiant, $user) {
+            $user->name = $request->nom;
+            $user->email = $request->email;
+            $user->save();
+            $etudiant->update([
+                'nom'               => $request->nom,
+                'adresse'           => $request->adresse,
+                'phone'             => $request->phone,
+                'email'             => $request->email,
+                'date_de_naissance' => $request->date_de_naissance,
+                'ville_id'          => $request->ville_id
+            ]);
 
-        return redirect(route('etudiants.show', $etudiant->id))->withSuccess('Étudiant modifié');
+            if ($request->has('villes')) {
+                $etudiant->villes()->attach($request->villes);
+            }
+            return $etudiant->id;
+        });
+        // $etudiant->update([
+        //     'nom'               => $request->nom,
+        //     'adresse'           => $request->adresse,
+        //     'phone'             => $request->phone,
+        //     'email'             => $request->email,
+        //     'date_de_naissance' => $request->date_de_naissance,
+        //     'ville_id'          => $request->ville_id
+        // ]);
+
+        return redirect(route('etudiants.show', $etudiantId))->withSuccess('Étudiant modifié');
     }
 
     /**
@@ -110,12 +141,14 @@ class EtudiantController extends Controller
      */
     public function destroy(Etudiant $etudiant)
     {
+        $user = User::find($etudiant->id);
+        $user->delete();
         $etudiant->delete();
         return redirect(route('etudiants.index'))->withSuccess('Étudiant supprimé');
     }
 
-    public function home() {
+    public function home()
+    {
         return view('accueil');
     }
-
 }

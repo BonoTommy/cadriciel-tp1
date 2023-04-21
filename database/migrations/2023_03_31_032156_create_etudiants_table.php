@@ -14,13 +14,13 @@ class CreateEtudiantsTable extends Migration
     public function up()
     {
         Schema::create('etudiants', function (Blueprint $table) {
-            $table->foreign('id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->id()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('nom');
             $table->string('adresse');
             $table->string('phone');
             $table->string('email');
             $table->string('date_de_naissance');
-            $table->foreignId('villeId')->constrained('villes')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('ville_id')->constrained('villes');
             $table->timestamps();
         });
     }

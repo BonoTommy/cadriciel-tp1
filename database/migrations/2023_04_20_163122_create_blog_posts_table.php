@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTestsTable extends Migration
+class CreateBlogPostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateTestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tests', function (Blueprint $table) {
+        Schema::create('blog_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('date');
-            $table->integer('unite');
-            $table->float('unite_kg');
-            $table->string('password');
-            $table->string('password_confirmation');
-            $table->integer('ville_id');
+            $table->integer('user_id');
+            $table->string('title')->nullable();
+            $table->text('body')->nullable();
+            $table->string('title_fr')->nullable();
+            $table->text('body_fr')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ class CreateTestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tests');
+        Schema::dropIfExists('blog_posts');
     }
 }

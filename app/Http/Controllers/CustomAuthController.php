@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+
 
 class CustomAuthController extends Controller
 {
@@ -87,5 +89,38 @@ class CustomAuthController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    public function authentication(Request $request) {
+
+        
+$password = Password::min(2)
+            ->mixedCase()
+            ->numbers()
+            ->letters();
+        
+        $request->validate([
+            'email'    =>  'required|email',
+            'password' => ['required', 'max: 20', $password],
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if(!Auth::validate($credentials)):
+            return redirect('login')
+                    ->withErrors(trans('auth.failed'));
+        endif;
+
+        $user = Auth::getProvider()->retrieveByCredentials($credentials);
+
+        Auth::login($user, $request->get('remember'));
+
+        return redirect()->intended('/')->withSuccess('Signed In');
+    }
+
+    public function logout() {
+        Session:: flush();
+        Auth::logout();
+        return redirect(route('login'));
     }
 }

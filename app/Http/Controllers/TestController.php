@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Test;
 use App\Models\Ville;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\TestStoreRequest;
+use DateTime;
 
 class TestController extends Controller
 {
@@ -38,19 +42,48 @@ class TestController extends Controller
      */
     public function store(TestStoreRequest $request)
     {
-        $test = Test::create([
-            'name'    => $request->name,
-            'date'    => $request->date,
-            'unite'   => $request->unite,
-            'unite_kg' => $request->unite_kg,
-            'password' => $request->password,
-            'password_confirmation' => $request->password_confirmation,
-            'ville_id' => $request->ville_id
-        ]);
+        $test = DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name'                  => $request->name,
+                'email'                 => $request->email,
+                'password'              => Hash::make($request->password),
+                'password_confirmation' => Hash::make($request->password_confirmation),
+                'email_verified_at'     => DateTime::class
+            ]);
+            $test = Test::create([
+                'testId'  => $user->id,
+                'name'    => $request->name,
+                'email'   => $request->email,
+                'date'    => $request->date,
+                'unite'   => $request->unite,
+                'unite_kg' => $request->unite_kg,
+                'password' => $request->password,
+                'password_confirmation' => $request->password_confirmation,
+                'ville_id' => $request->ville_id
+            ]);
+            $test->update(['testId' => $user->id]);
 
-        if ($request->has('villes')) {
-            $test->villes()->attach($request->villes);
-        }
+            if ($request->has('villes')) {
+                $test->villes()->attach($request->villes);
+            }
+            return $test->testId;
+        });
+        return redirect(route('tests.create'))->withSuccess('test ajouter');
+
+        //  $test = Test::create([
+        //      'name'    => $request->name,
+        //      'email'   => $resquest->email,
+        //      'date'    => $request->date,
+        //      'unite'   => $request->unite,
+        //      'unite_kg' => $request->unite_kg,
+        //      'password' => $request->password,
+        //      'password_confirmation' => $request->password_confirmation,
+        //      'ville_id' => $request->ville_id
+        // ]);
+
+        // if ($request->has('villes')) {
+        //     $test->villes()->attach($request->villes);
+        // }
     }
 
     /**

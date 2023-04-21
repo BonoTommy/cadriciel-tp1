@@ -31,6 +31,7 @@ class TestStoreRequest extends FormRequest
 
         return [
             'name' => ['required', 'max:50', 'min:2'],
+            'email' => ['required', 'email'],
             'date' => ['required', 'date', 'date_format:d-m-Y'],
             'unite' => ['required', 'integer', 'gte:1'],
             'unite_kg' => ['required', 'numeric', 'gte:0.01', 'regex:/^\d+\.\d{2,}$/'],
