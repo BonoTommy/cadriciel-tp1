@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BlogPostStoreRequest;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class BlogPostController extends Controller
      */
     public function index()
     {
-        $blogs = BlogPost::all();
+        $blogs = BlogPost::blogPostSelect();
 
         return view('blog.index', ['blogs' => $blogs]);
     }
@@ -41,7 +42,7 @@ class BlogPostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BlogPostStoreRequest $request)
     {
         if (($request->title && $request->body) || ($request->title_fr && $request->body_fr)) {
             $blogPost = BlogPost::create([
@@ -85,7 +86,7 @@ class BlogPostController extends Controller
      * @param  \App\Models\BlogPost  $blogPost
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BlogPost $blogPost)
+    public function update(BlogPostStoreRequest $request, BlogPost $blogPost)
     {
         if (($request->title && $request->body) || ($request->title_fr && $request->body_fr)) {
             $blogPost->update([
@@ -117,17 +118,6 @@ class BlogPostController extends Controller
 
         return view('blog.myPosts', ['blogPosts' => $blogPosts]);
         
-    }
-
-    static public function blogPostTranslate() {
-        $lang = session('localDB');
-        session()->has('locale') && session()->get('locale') == 'fr' ? $lang = '_fr' : '';
-
-        return BlogPost::select('id', 
-                                DB::raw("(CASE WHEN title$lang IS NULL THEN title ELSE title$lang END) AS title"),
-                                DB::raw("(CASE WHEN body$lang IS NULL THEN body ELSE body$lang END) AS body")
-        )
-        ->orderby('created_at', 'desc')->get();
     }
 
 }

@@ -15,7 +15,7 @@
             <hr>
         </div>
     </div>
-    @if (Auth::user()->id == $blogPost->user_id)
+    @if (Auth::user()->id == $blogPost->etudiant_id)
     <div class="row text-center">
         <div class="col-md-6">
             <a href="{{ route('blog.edit', $blogPost->id)}}" class="btn btn-success btn-sm">Modifier</a>
