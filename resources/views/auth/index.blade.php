@@ -18,20 +18,20 @@
                 <form action="{{route('authentication')}}" method="post">
                     @csrf
                     <div class="card-header text-center">
-                        <h1 class="display-6">Login</h1>
+                        <h1 class="display-6">@lang('lang.text_login')</h1>
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-3">
-                            <label for="email">Email</label>
+                            <label for="email">@lang('lang.text_email')</label>
                             <input type="email" name="email" id="email" class="form-control" value="{{old('email')}}">
                         </div>
                         <div class="form-group mb-3">
-                            <label for="password">Password</label>
+                            <label for="password">@lang('lang.text_password')</label>
                             <input type="password" name="password" id="password" class="form-control">
                         </div>
                     </div>
                     <div class="card-footer text-center">
-                            <input type="submit" value="Login" class="btn btn-primary">
+                            <input type="submit" value=@lang('lang.text_login') class="btn btn-primary">
                     </div>
                 </form>
             </div>

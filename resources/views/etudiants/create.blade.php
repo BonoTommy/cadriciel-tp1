@@ -6,6 +6,9 @@
     <div class="col-md-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <a href="{{ route('etudiants.index') }}" class="btn btn-primary btn-sm my-3">Retour</a>
+            @if(count($errors->get('title')) > 0)
+                <div class="text-sm text-danger">La version anglaise est obligatoire</div>
+            @endif
                 <div class="card mb-3">
                     <form method="post">
                     @csrf

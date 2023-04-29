@@ -24,10 +24,10 @@ class BlogPostStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'      => ['min:2'],
-            'title_fr'   => ['min:2'],
-            'body'       => ['min:2'],
-            'body_fr'    => ['min:2'],
+            'title'      => ['required', 'min:2'],
+            'title_fr'   => ['nullable', 'min:2'],
+            'body'       => ['required', 'min:2'],
+            'body_fr'    => ['nullable', 'min:2'],
         ];
     }
 }

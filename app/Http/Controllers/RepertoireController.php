@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RepertoireStoreRequest;
 use App\Models\Repertoire;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 class RepertoireController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth.student');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +22,9 @@ class RepertoireController extends Controller
      */
     public function index()
     {
-        
+        $repertoires = Repertoire::fileTitleSelect();
+
+        return view('repertoire.index', ['repertoires' => $repertoires]);
     }
 
     /**
@@ -25,7 +34,7 @@ class RepertoireController extends Controller
      */
     public function create()
     {
-        //
+        return view('repertoire.create');
     }
 
     /**
@@ -36,13 +45,17 @@ class RepertoireController extends Controller
      */
     public function store(RepertoireStoreRequest $request)
     {
-        $file = $request->file('file')->store('public/repertoires');
+        $file = $request->file('file')->store('repertoires');
 
-        Repertoire::create([
-            'title'     => $request->title,
-            'title_fr'  => $request->title_fr,
-            'file'      => $file
-        ]);
+        if ($request->title || $request->title_fr) {
+            Repertoire::create([
+                'title'     => $request->title,
+                'title_fr'  => $request->title_fr,
+                'file'      => $file,
+                'etudiant_id'  => Auth::user()->id
+            ]);
+            return redirect(route('repertoire.index'))->withSuccess('File inserted');
+        } else return redirect(route('repertoire.create'))->withErrors('File wasn\'t uploaded');
     }
 
     /**
@@ -53,7 +66,11 @@ class RepertoireController extends Controller
      */
     public function show(Repertoire $repertoire)
     {
-        //
+        $repertoire = Repertoire::fileTitleSelect()
+            ->where('id', $repertoire->id)
+            ->get();
+
+        return view('repertoire.show', ['repertoire' => $repertoire]);
     }
 
     /**
@@ -64,7 +81,7 @@ class RepertoireController extends Controller
      */
     public function edit(Repertoire $repertoire)
     {
-        //
+        return view('repertoire.edit', ['repertoire' => $repertoire]);
     }
 
     /**
@@ -76,7 +93,19 @@ class RepertoireController extends Controller
      */
     public function update(Request $request, Repertoire $repertoire)
     {
-        //
+        if ($request->hasFile('file')) {
+            Storage::delete($repertoire->file);
+            $file = $request->file('file')->store('repertoires');
+        }
+
+        if (($request->title || $request->title_fr) && $request->file) {
+            $repertoire->update([
+                'title' => $request->title,
+                'title_fr' => $request->title_fr,
+                'file' => $file
+            ]);
+            return redirect(route('repertoire.index'))->withSuccess('Post updated');
+        } else return redirect(route('repertoire.edit'))->withErrors('You must insert a title and a post in french or in english');
     }
 
     /**
@@ -87,6 +116,16 @@ class RepertoireController extends Controller
      */
     public function destroy(Repertoire $repertoire)
     {
-        //
+        Storage::delete($repertoire->file);
+        $repertoire->delete();
+
+        return redirect(route('repertoire.index'))->withSuccess('Post Deleted');
+    }
+
+    public function myDocs()
+    {
+        $repertoires = Repertoire::myDocsTable(Auth::user()->id);
+
+        return view('repertoire.myDocs', ['repertoires' => $repertoires]);
     }
 }

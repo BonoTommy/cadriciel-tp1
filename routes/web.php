@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\LocalizationController;
+use App\Http\Controllers\RepertoireController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,5 +47,12 @@ Route::get('blog-edit/{blogPost}', [BlogPostController::class, 'edit'])->name('b
 Route::put('blog-edit/{blogPost}', [BlogPostController::class, 'update']);
 Route::delete('blog/{blogPost}', [BlogPostController::class, 'destroy']);
 
-Route::get('test-ajout', [TestController::class, 'create'])->name('tests.create');
-Route::post('test-ajout', [TestController::class, 'store']);
+Route::get('repertoire', [RepertoireController::class, 'index'])->name('repertoire.index');
+Route::get('repertoire/{repertoire}', [RepertoireController::class, 'show'])->name('repertoire.show');
+Route::get('myDocs', [RepertoireController::class, 'myDocs'])->name('repertoire.myDocs');
+Route::get('repertoire-create', [RepertoireController::class, 'create'])->name('repertoire.create');
+Route::post('repertoire-create', [RepertoireController::class, 'store']);
+Route::get('repertoire-edit/{repertoire}', [RepertoireController::class, 'edit'])->name('repertoire.edit');
+Route::put('repertoire-edit/{repertoire}', [RepertoireController::class, 'update']);
+Route::delete('retpertoire/{repertoire}', [RepertoireController::class, 'destroy'])->name('repertoire.delete');
+

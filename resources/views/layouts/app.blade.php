@@ -17,7 +17,9 @@
         <div class="container">
         @php $lang =  session('locale') @endphp
             <a href="{{route('accueil')}}" class="navbar-brand">Maisonneuve-e2295815</a>
-            <span class="text-white">@lang('lang.text_hello') {{ Auth::user()->name ?? "" }}</span>
+            @if(Auth::user())
+            <span class="text-white">@lang('lang.text_hello') {{ Auth::user()->name }}</span>
+            @endif
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -26,23 +28,26 @@
                 <ul class="navbar-nav ms-auto">
                 @guest
                     <li class="nav-item">
-                        <a href="{{ route('accueil')}}" class="nav-link">Accueil</a>
+                        <a href="{{ route('accueil')}}" class="nav-link">@lang('lang.link_home')</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('etudiants.create') }}" class="nav-link">S'enregistrer comme étudiant</a>
+                        <a href="{{ route('etudiants.create') }}" class="nav-link">@lang('lang.link_student_register')</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('login')}}" class="nav-link">Connexion</a>
+                        <a href="{{ route('login')}}" class="nav-link">@lang('lang.link_login')</a>
                     </li>
                 @else
                     <li class="nav-item">
-                        <a href="{{ route('etudiants.index') }}" class="nav-link">Liste des étudiants</a>
+                        <a href="{{ route('etudiants.index') }}" class="nav-link">@lang('lang.link_student')</a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a class="nav-link" href="{{route('blog.index')}}">Blogs</a>
-                    </li> --}}
                     <li class="nav-item">
-                        <a href="{{ route('logout') }}" class="nav-link">Déconnexion</a>
+                        <a class="nav-link" href="{{route('blog.index')}}">@lang('lang.link_blog')</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('repertoire.index')}}">@lang('lang.link_file')</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('logout') }}" class="nav-link">@lang('lang.link_logout')</a>
                     </li>
                 @endguest
                     <li class="nav-item">
@@ -72,7 +77,8 @@
         <div class="row justify-content-center mt-1 mb-1">
             <div class="col-md-6">
                 <div class="alert alert-success alert-dismissible fade show">{{ session('success') }}
-                <div class="btn-close" type="button" data-bs-dismiss="alert" aria-label="close"></div></div>
+                    <div class="btn-close" type="button" data-bs-dismiss="alert" aria-label="close"></div>
+                </div>
             </div>
         </div>
         @endif

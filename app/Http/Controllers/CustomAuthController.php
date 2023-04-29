@@ -94,10 +94,10 @@ class CustomAuthController extends Controller
     public function authentication(Request $request) {
 
         
-$password = Password::min(2)
-            ->mixedCase()
-            ->numbers()
-            ->letters();
+        $password = Password::min(2)
+                    ->mixedCase()
+                    ->numbers()
+                    ->letters();
         
         $request->validate([
             'email'    =>  'required|email',

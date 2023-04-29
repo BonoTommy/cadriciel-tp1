@@ -24,9 +24,9 @@ class RepertoireStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'     => ['min:2'],
-            'title'     => ['min:2'],
-            'file'      => ['required', 'file', 'mimes:pdf, zip, doc']
+            'title'        => ['required', 'min:2'],
+            'title_fr'     => ['nullable', 'min:2'],
+            'file'         => ['required', 'file', 'mimes:zip,docx,pdf,doc']
         ];
     }
 }

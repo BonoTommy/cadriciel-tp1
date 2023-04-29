@@ -1,15 +1,20 @@
 @extends('layouts.app')
 @section('title', 'Blog - Create')
+@section('h1', __('lang.title_blog'))
 @section('content')
         <div class="row">
             <div class="col-12 text-center pt-2">
                 <h1 class="display-5">
-                    Ajouter un article
+                    @lang('lang.h1_add')
                 </h1>
             </div> <!--/col-12-->
         </div><!--/row-->
                 <hr>
+        <a href="{{ route('blog.index')}}" class="btn btn-primary btn-sm my-3" >@lang('lang.btn_back')</a>
         <div class="row justify-content-center">
+            @if(count($errors->get('title')) > 0 || count($errors->get('body')) > 0)
+                <div class="text-sm text-danger">La version anglaise est obligatoire</div>
+            @endif
             <div class="col-md-6">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -25,32 +30,37 @@
                             <div class="control-group col-12">
                                 <label for="title_fr">Titre de l'article</label>
                                 <input type="text" id="title_fr" name="title_fr" class="form-control" >
+                               @error('title_fr')
+                                    <div class="text-sm text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="control-group col-12 mt-3">
                                 <label for="body_fr">Article</label>
                                 <textarea rows="4" class="form-control" id="body_fr" name="body_fr"></textarea>
+                                @error('body_fr')
+                                    <div class="text-sm text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                                 
                         </div>
                         <div class="tab-pane fade" id="nav-en" role="tabpanel" aria-labelledby="nav-en-tab">
-                            <div class="card mt-4">
-                                <div class="card-header">
-                                    Add a Post Form
-                                </div>
-                                <div class="card-body">   
-                                    <div class="control-group col-12">
-                                        <label for="title">Post Title</label>
-                                        <input type="text" id="title" name="title" class="form-control" >
-                                    </div>
-                                    <div class="control-group col-12 mt-3">
-                                        <label for="message">Message</label>
-                                        <textarea rows="4" class="form-control" id="message" name="body"></textarea>
-                                    </div>
-                                </div>
+                            <div class="control-group col-12">
+                                <label for="title">Post Title</label>
+                                <input type="text" id="title" name="title" class="form-control" >
+                                @error('title')
+                                    <div class="text-sm text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="control-group col-12 mt-3">
+                                <label for="message">Post</label>
+                                <textarea rows="4" class="form-control" id="message" name="body"></textarea>
+                                @error('body')
+                                    <div class="text-sm text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="text-left mt-3">
-                            <input type="submit" class="btn btn-success" value="Soumettre">
+                            <input type="submit" class="btn btn-success" value=@lang('lang.btn_submit')>
                         </div>
                     </div>
                 </form>

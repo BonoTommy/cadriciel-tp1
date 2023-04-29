@@ -23,7 +23,10 @@ class CreateEtudiantsTable extends Migration
             $table->foreignId('ville_id')->constrained('villes');
             $table->timestamps();
         });
+        
     }
+
+    
 
     /**
      * Reverse the migrations.

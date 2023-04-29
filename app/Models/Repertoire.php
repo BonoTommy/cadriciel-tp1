@@ -22,10 +22,48 @@ class Repertoire extends Model
         $lang = session('localDB');
         session()->has('locale') && session()->get('locale') == 'fr' ? $lang = '_fr' : '';
 
-        return BlogPost::select(
-            'id',
+        return Repertoire::select(
+            'id', 'created_at', 'updated_at', 'file', 'etudiant_id',
             DB::raw("(CASE WHEN title$lang IS NULL THEN title ELSE title$lang END) AS title")
         )
-            ->orderby('created_at', 'desc')->get();
+            ->orderby('created_at', 'desc')
+            ->paginate(20);
     }
+
+    static public function myDocsTable($id)
+    {
+        $lang = session('localDB');
+        session()->has('locale') && session()->get('locale') == 'fr' ? $lang = '_fr' : '';
+
+        return Repertoire::select(
+            'id',
+            'created_at',
+            'updated_at',
+            'file',
+            'etudiant_id',
+            DB::raw("(CASE WHEN title$lang IS NULL THEN title ELSE title$lang END) AS title")
+        )
+            ->orderby('updated_at', 'desc')
+            ->where('etudiant_id', $id)
+            ->paginate(20);
+    }
+
+    static public function repertoireEditSelect($id)
+    {
+        $lang = session('localDB');
+        session()->has('locale') && session()->get('locale') == 'fr' ? $lang = '_fr' : '';
+
+        return Repertoire::select(
+            'id',
+            'created_at',
+            'updated_at',
+            'file',
+            'etudiant_id',
+            'title',
+            'title_fr'
+        )
+            ->where('id', $id)
+            ->first();
+    }
+
 }

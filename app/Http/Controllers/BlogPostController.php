@@ -65,7 +65,9 @@ class BlogPostController extends Controller
      */
     public function show(BlogPost $blogPost)
     {
-        return view('blog.show', ['blogPost' => $blogPost]);
+        $blog = BlogPost::blogPostShow($blogPost->id);
+
+        return view('blog.show', ['blog' => $blog]);
     }
 
     /**
@@ -112,9 +114,8 @@ class BlogPostController extends Controller
     }
 
     public function myPosts() {
-        $blogPosts = BlogPost::select()
-            ->where('user_id', Auth::user()->id)
-            ->get();
+        $blogPosts = BlogPost::blogPostSelect()
+            ->where('user_id', Auth::user()->id);
 
         return view('blog.myPosts', ['blogPosts' => $blogPosts]);
         
