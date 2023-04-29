@@ -2,6 +2,13 @@
 
 https://e2295815.webdev.cmaisonneuve.qc.ca/cadriciel-tp1/
 
+https://e2295815.webdev.cmaisonneuve.qc.ca/cadriciel-tp2/
+
+Utilisateur: peter@gmail.com
+
+Mot de Passe: Abc123456
+
+
 ## Lignes de commande pour le projet
 
 - Créer le projet
